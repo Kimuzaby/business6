@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>La Casa de las Flores | Florería Artesanal</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,600&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- NAV -->
+  <header class="nav-header">
+    <nav class="nav-inner">
+      <a href="index.html" class="logo">
+        <span class="logo-icon">❧</span>
+        <span class="logo-text">La Casa de las Flores</span>
+      </a>
+      <div class="nav-links">
+        <a href="#catalogo" class="nav-link">Tienda</a>
+        <a href="cotizar/index.html" class="nav-link nav-link--active">Cotizar Eventos</a>
+        <button class="cart-btn" onclick="toggleCart()">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+          Carrito
+          <span class="cart-badge" id="cart-count">0</span>
+        </button>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+
+    <!-- HERO -->
+    <section class="hero">
+      <div class="hero-bg">
+        <img src="img/hero-flores.jpg" alt="Flores" class="hero-img" onerror="this.style.display='none'">
+        <div class="hero-overlay"></div>
+      </div>
+      <div class="hero-content">
+        <div class="hero-badge">
+          <span class="hero-badge-icon">❧</span>
+          Florería Artesanal · El Salvador
+        </div>
+        <h1 class="hero-title">
+          Arte y belleza floral<br>
+          <em class="hero-title-em">en cada ramo.</em>
+        </h1>
+        <p class="hero-desc">
+          Arreglos para toda ocasión, regalos personalizados y decoración de eventos.
+          Hechos a mano por Jorge Hernández, con envíos a domicilio las 24 horas.
+        </p>
+        <div class="hero-actions">
+          <a href="#catalogo" class="btn-primary">Ver el catálogo</a>
+          <a href="cotizar/index.html" class="btn-ghost">Cotizar un evento</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- FEATURES STRIP -->
+    <section class="features">
+      <div class="features-inner">
+        <div class="feature-item">
+          <div class="feature-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+          </div>
+          <div>
+            <strong>Envíos a domicilio</strong>
+            <p>Llevamos tus flores a la puerta.</p>
+          </div>
+        </div>
+        <div class="feature-item">
+          <div class="feature-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          </div>
+          <div>
+            <strong>Abierto 24/7</strong>
+            <p>Pedidos en cualquier momento.</p>
+          </div>
+        </div>
+        <div class="feature-item">
+          <div class="feature-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>
+          </div>
+          <div>
+            <strong>Hecho a mano</strong>
+            <p>Cada arreglo, una pieza única.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CATALOGO -->
+    <section class="catalog" id="catalogo">
+      <div class="catalog-header">
+        <span class="section-label">CATÁLOGO</span>
+        <h2 class="section-title">Nuestros arreglos</h2>
+        <p class="section-sub">Tres composiciones para celebrar, agradecer o sorprender a quien quieras.</p>
+      </div>
+
+      <div class="products-grid">
+
+        <!-- Producto 1 -->
+        <div class="product-card">
+          <div class="product-photo">
+            <div class="polaroid-frame">
+              <img src="img/rosa-pastel.png" alt="Rosa Pastel" onerror="this.src='https://images.unsplash.com/photo-1490750967868-88df5691cc06?w=400&q=80'">
+              <div class="polaroid-label">
+                <span class="polaroid-logo">La Casa de las Flores</span>
+                <span class="polaroid-name">ROSA PASTEL</span>
+              </div>
+            </div>
+          </div>
+          <div class="product-info">
+            <h3 class="product-name">Rosa Pastel</h3>
+            <p class="product-desc">Rosas pastel y lisianthus en tonos suaves. Elegancia romántica.</p>
+            <div class="product-footer">
+              <div class="product-price">
+                <span class="price-label">DESDE</span>
+                <span class="price-amount">$45.00</span>
+              </div>
+              <button class="btn-add" onclick="addToCart('prod-1', 'Arreglo Rosa Pastel', 45.00)">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+                Añadir
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Producto 2 -->
+        <div class="product-card product-card--featured">
+          <div class="product-photo">
+            <div class="polaroid-frame">
+              <img src="img/promesa-flores.png" alt="Encanto Violeta" onerror="this.src='https://images.unsplash.com/photo-1487530811015-780eec3a0a22?w=400&q=80'">
+              <div class="polaroid-label polaroid-label--dark">
+                <span class="polaroid-logo">La Casa de las Flores</span>
+                <span class="polaroid-name">ENCANTO VIOLETA</span>
+              </div>
+            </div>
+          </div>
+          <div class="product-info">
+            <h3 class="product-name">Encanto Violeta</h3>
+            <p class="product-desc">Rosas pastel y lisianthus morados en base artesanal.</p>
+            <div class="product-footer">
+              <div class="product-price">
+                <span class="price-label">DESDE</span>
+                <span class="price-amount">$65.00</span>
+              </div>
+              <button class="btn-add" onclick="addToCart('prod-2', 'Encanto Violeta', 65.00)">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+                Añadir
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Producto 3 -->
+        <div class="product-card">
+          <div class="product-photo">
+            <div class="polaroid-frame">
+              <img src="img/arreglo-morado.png" alt="Promesa de Flores" onerror="this.src='https://images.unsplash.com/photo-1465189684280-6a8fa9b19a7a?w=400&q=80'">
+              <div class="polaroid-label">
+                <span class="polaroid-logo">La Casa de las Flores</span>
+                <span class="polaroid-name polaroid-name--italic">Cada gota de lluvia es una promesa de nuevas flores.</span>
+              </div>
+            </div>
+          </div>
+          <div class="product-info">
+            <h3 class="product-name">Promesa de Flores</h3>
+            <p class="product-desc">Rosas pastel y lisianthus violetas. Una promesa hecha ramo.</p>
+            <div class="product-footer">
+              <div class="product-price">
+                <span class="price-label">DESDE</span>
+                <span class="price-amount">$55.00</span>
+              </div>
+              <button class="btn-add" onclick="addToCart('prod-3', 'Promesa de Flores', 55.00)">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+                Añadir
+              </button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <div class="footer-logo">
+          <span class="logo-icon">❧</span>
+          <span>La Casa de las Flores</span>
+        </div>
+        <p>Arte y belleza floral en cada ramo. Arreglos para toda ocasión.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Contacto</h4>
+        <p>@lacasadelasflores_sv</p>
+        <p>Jorge Hernández</p>
+        <p>Abierto 24/7 · Envíos a domicilio</p>
+      </div>
+      <div class="footer-col">
+        <h4>Servicios</h4>
+        <p>Arreglos personalizados</p>
+        <p>Decoración de eventos</p>
+        <p>Regalos a domicilio</p>
+        <p>Bodas y graduaciones</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- CART OVERLAY + SIDEBAR -->
+  <div id="cart-overlay" class="overlay" onclick="toggleCart()"></div>
+  <aside id="cart-sidebar" class="sidebar">
+    <div class="sidebar-header">
+      <h2>Tu pedido</h2>
+      <button class="btn-close" onclick="toggleCart()">✕</button>
+    </div>
+    <div class="sidebar-body">
+      <div id="cart-items"></div>
+      <div class="checkout-form">
+        <h3>Datos de entrega</h3>
+        <label class="form-label">Tu nombre</label>
+        <input type="text" id="client-name" class="form-input" placeholder="María Pérez">
+        <label class="form-label">Método de entrega</label>
+        <select id="delivery-method" class="form-input" onchange="toggleDelivery()">
+          <option value="">Seleccione una opción...</option>
+          <option value="delivery">Delivery a domicilio</option>
+          <option value="pickup">Retirar en tienda</option>
+        </select>
+        <div id="delivery-extra" style="display:none;">
+          <label class="form-label">Dirección de entrega</label>
+          <textarea id="delivery-address" class="form-input" rows="2" placeholder="Colonia, calle, casa..."></textarea>
+        </div>
+        <label class="form-label">Notas del pedido</label>
+        <textarea id="order-notes" class="form-input" rows="2" placeholder="Color preferido, ocasión especial..."></textarea>
+      </div>
+    </div>
+    <div class="cart-footer">
+      <button class="btn-empty" onclick="emptyCart()">🗑 Vaciar carrito</button>
+      <div class="cart-total-row">
+        <span>Total</span>
+        <span id="cart-total">$0.00</span>
+      </div>
+      <button class="btn-whatsapp" id="btn-whatsapp" onclick="sendWhatsApp()">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
+        Confirmar por WhatsApp
+      </button>
+    </div>
+  </aside>
+
+  <script src="app.js"></script>
+</body>
+</html>

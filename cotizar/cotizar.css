@@ -1,0 +1,308 @@
+/* ─── COTIZAR PAGE STYLES ─── */
+
+/* Hero */
+.cotizar-hero {
+  background: var(--blush);
+  border-bottom: 1px solid var(--border);
+  padding: 5rem 2rem 4rem;
+  text-align: center;
+}
+
+.cotizar-hero-inner {
+  max-width: 680px;
+  margin: 0 auto;
+}
+
+.cotizar-title {
+  font-size: clamp(2.4rem, 5vw, 3.4rem);
+  margin: 1rem 0;
+  line-height: 1.15;
+}
+
+.cotizar-em {
+  font-style: italic;
+  color: var(--primary);
+}
+
+.cotizar-sub {
+  color: var(--muted-fg);
+  font-size: 0.93rem;
+  line-height: 1.7;
+  max-width: 520px;
+  margin: 0 auto;
+}
+
+/* Benefits */
+.benefits {
+  border-bottom: 1px solid var(--border);
+  padding: 2.5rem 2rem;
+}
+
+.benefits-inner {
+  max-width: 900px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+}
+
+.benefit-card {
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.5rem;
+  background: var(--card);
+  text-align: center;
+}
+
+.benefit-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: var(--blush);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 0.9rem;
+  color: var(--primary);
+}
+
+.benefit-card h3 {
+  font-family: var(--font-serif);
+  font-size: 1.05rem;
+  margin-bottom: 0.2rem;
+}
+
+.benefit-card p {
+  font-size: 0.8rem;
+  color: var(--muted-fg);
+  margin: 0;
+}
+
+/* Form section */
+.form-section {
+  padding: 3rem 2rem 5rem;
+  display: flex;
+  justify-content: center;
+}
+
+.form-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: calc(var(--radius) * 1.5);
+  padding: 2.5rem;
+  max-width: 580px;
+  width: 100%;
+  box-shadow: var(--shadow);
+}
+
+.form-title {
+  font-size: 1.8rem;
+  margin-bottom: 0.3rem;
+}
+
+.form-subtitle {
+  font-size: 0.85rem;
+  color: var(--muted-fg);
+  margin-bottom: 2rem;
+}
+
+/* Field groups */
+.field-group {
+  margin-bottom: 1.2rem;
+}
+
+.field-label {
+  display: block;
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: var(--foreground);
+  margin-bottom: 0.4rem;
+}
+
+.field-input {
+  width: 100%;
+  border: 1px solid var(--border);
+  border-radius: 0.5rem;
+  padding: 0.6rem 0.85rem;
+  font-size: 0.87rem;
+  font-family: var(--font-sans);
+  background: var(--background);
+  color: var(--foreground);
+  transition: border-color 0.2s;
+  box-sizing: border-box;
+  appearance: auto;
+}
+
+.field-input:focus {
+  outline: none;
+  border-color: var(--primary);
+}
+
+.field-input::placeholder {
+  color: var(--muted-fg);
+}
+
+.field-textarea {
+  min-height: 110px;
+  resize: vertical;
+}
+
+.field-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+/* Event type chips */
+.event-types {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.event-chip {
+  border: 1px solid var(--border);
+  background: transparent;
+  border-radius: 2rem;
+  padding: 0.35rem 0.9rem;
+  font-size: 0.82rem;
+  font-family: var(--font-sans);
+  cursor: pointer;
+  color: var(--foreground);
+  transition: all 0.18s;
+}
+
+.event-chip:hover {
+  border-color: var(--primary);
+  color: var(--primary);
+}
+
+.event-chip.active {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: white;
+}
+
+/* Submit button */
+.btn-submit {
+  width: 100%;
+  background: var(--primary);
+  color: white;
+  border: none;
+  border-radius: 2rem;
+  padding: 0.9rem 1.5rem;
+  font-size: 0.95rem;
+  font-family: var(--font-sans);
+  font-weight: 500;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-top: 1.5rem;
+  transition: opacity 0.2s;
+}
+
+.btn-submit:hover { opacity: 0.87; }
+
+.form-note {
+  text-align: center;
+  font-size: 0.78rem;
+  color: var(--muted-fg);
+  margin-top: 0.8rem;
+}
+
+/* Success message */
+.success-msg {
+  text-align: center;
+  padding: 2rem;
+  background: var(--blush);
+  border-radius: var(--radius);
+  margin-top: 1.5rem;
+}
+
+.success-icon {
+  font-size: 2.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.success-msg h3 {
+  font-size: 1.3rem;
+  margin-bottom: 0.4rem;
+}
+
+.success-msg p {
+  font-size: 0.85rem;
+  color: var(--muted-fg);
+}
+
+@media (max-width: 600px) {
+  .benefits-inner { grid-template-columns: 1fr; }
+  .field-row { grid-template-columns: 1fr; }
+  .form-card { padding: 1.5rem; }
+}
+
+/* ─── COTIZAR PAGE STYLES (añadiendo las partes nuevas) ─── */
+
+/* ... (todos los estilos anteriores se conservan, solo añadimos los siguientes) ... */
+
+/* Tarjetas de producto */
+.product-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 1rem;
+  margin-top: 0.3rem;
+}
+
+.product-card {
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 0.8rem;
+  background: var(--card);
+  cursor: pointer;
+  text-align: center;
+  transition: all 0.2s;
+}
+
+.product-card:hover {
+  border-color: var(--primary);
+}
+
+.product-card.active {
+  border-color: var(--primary);
+  background: var(--blush);
+}
+
+.product-img {
+  width: 100%;
+  height: 130px;
+  object-fit: cover;
+  border-radius: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.product-info h4 {
+  font-family: var(--font-serif);
+  font-size: 0.95rem;
+  margin-bottom: 0.2rem;
+}
+
+.product-info p {
+  font-size: 0.75rem;
+  color: var(--muted-fg);
+  line-height: 1.4;
+  margin-bottom: 0.4rem;
+}
+
+.product-price {
+  font-weight: 600;
+  font-size: 0.85rem;
+  color: var(--primary);
+}
+
+/* Ajustes responsive */
+@media (max-width: 600px) {
+  .product-cards {
+    grid-template-columns: 1fr;
+  }
+}
