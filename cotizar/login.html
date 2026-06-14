@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login Admin | La Casa de las Flores</title>
+  <link rel="stylesheet" href="../style.css">
+  <link rel="stylesheet" href="cotizar.css">
+  <style>
+    .login-container { 
+      max-width: 400px; 
+      margin: 5rem auto; 
+      padding: 2rem; 
+      background: var(--card); 
+      border: 1px solid var(--border); 
+      border-radius: var(--radius); 
+      text-align: center; 
+    }
+  </style>
+</head>
+<body>
+  <div class="login-container">
+    <span class="logo-icon" style="font-size: 2rem; color: var(--primary);">❧</span>
+    <h2 style="margin-bottom: 1.5rem;">Acceso Administrativo</h2>
+    
+    <div class="field-group">
+      <input type="email" id="email" class="field-input" placeholder="Correo electrónico">
+    </div>
+    <div class="field-group">
+      <input type="password" id="password" class="field-input" placeholder="Contraseña">
+    </div>
+    
+    <button class="btn-submit" onclick="login()">Ingresar</button>
+    <p id="error-msg" style="color: red; font-size: 0.8rem; margin-top: 1rem; display: none;"></p>
+  </div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-app.js";
+    import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-auth.js";
+
+    // Tu configuración de Firebase
+    const firebaseConfig = {
+      apiKey: "AIzaSyApqXnIJO8YxbZki879_WliO4w8IaPnccQ",
+      authDomain: "la-casa-de-las-flores-6519b.firebaseapp.com",
+      projectId: "la-casa-de-las-flores-6519b",
+      storageBucket: "la-casa-de-las-flores-6519b.firebasestorage.app",
+      messagingSenderId: "276633472408",
+      appId: "1:276633472408:web:c3c132939d238f9f282fed"
+    };
+
+    // Inicializar Firebase
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+
+    // Adjuntar la función a window para que funcione con el onclick del botón
+    window.login = function() {
+      const email = document.getElementById('email').value;
+      const pass = document.getElementById('password').value;
+      const errorMsg = document.getElementById('error-msg');
+
+      signInWithEmailAndPassword(auth, email, pass)
+        .then((userCredential) => {
+          window.location.href = "index.html"; // Redirige al panel admin
+        })
+        .catch((error) => {
+          errorMsg.style.display = 'block';
+          errorMsg.innerText = "Credenciales incorrectas.";
+        });
+    }
+  </script>
+</body>
+</html>
