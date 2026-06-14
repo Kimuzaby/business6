@@ -83,6 +83,12 @@ window.generateInvoicePDF = async function() {
     const validity = document.getElementById('client-validity').value;
     const total = window.calculateTotal();
 
+    // 1. Cambiar el estado del botón a "Descargando..."
+    const btn = document.querySelector('.btn-generate');
+    const originalText = btn.innerHTML;
+    btn.innerHTML = "Procesando PDF...";
+    btn.disabled = true;
+
     let itemsHTML = '';
     const rows = document.querySelectorAll('.item-row');
     rows.forEach(row => {
@@ -107,11 +113,9 @@ window.generateInvoicePDF = async function() {
         }
     });
 
-    const element = document.getElementById('pdf-template');
-    element.style.display = 'block';
-
-    element.innerHTML = `
-        <div style="padding: 50px; font-family: 'Helvetica', sans-serif; color: #333; background: #fff; width: 100%; box-sizing: border-box;">
+    // 2. Pasar el diseño directamente como String (Texto). Ancho fijo de 800px.
+    const htmlContent = `
+        <div style="padding: 50px; font-family: 'Helvetica', sans-serif; color: #333; background: #fff; width: 800px; box-sizing: border-box;">
             <div style="display: flex; justify-content: space-between; border-bottom: 2px solid #f2e7e7; padding-bottom: 20px; margin-bottom: 30px;">
                 <div>
                     <h1 style="font-family: 'Georgia', serif; font-size: 26px; margin: 0; color: #1a1a1a;">La Casa de las Flores</h1>
@@ -159,10 +163,18 @@ window.generateInvoicePDF = async function() {
         margin:       0,
         filename:     `Cotizacion_${clientName.replace(/ /g, '_')}.pdf`,
         image:        { type: 'jpeg', quality: 0.98 },
-        html2canvas:  { scale: 2 },
+        html2canvas:  { scale: 2, useCORS: true }, // useCORS mejora la carga
         jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
     };
 
-    await html2pdf().set(opt).from(element).save();
-    element.style.display = 'none';
+    // 3. Procesar, descargar y restaurar el botón
+    try {
+        await html2pdf().set(opt).from(htmlContent).save();
+    } catch (error) {
+        console.error("Error al generar PDF:", error);
+        alert("Ocurrió un error al descargar. Intenta nuevamente.");
+    } finally {
+        btn.innerHTML = originalText;
+        btn.disabled = false;
+    }
 };
