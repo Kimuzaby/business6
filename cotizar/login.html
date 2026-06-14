@@ -4,41 +4,39 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Login Admin | La Casa de las Flores</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,600&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../style.css">
   <link rel="stylesheet" href="cotizar.css">
-  <style>
-    .login-container { 
-      max-width: 400px; 
-      margin: 5rem auto; 
-      padding: 2rem; 
-      background: var(--card); 
-      border: 1px solid var(--border); 
-      border-radius: var(--radius); 
-      text-align: center; 
-    }
-  </style>
 </head>
-<body>
-  <div class="login-container">
-    <span class="logo-icon" style="font-size: 2rem; color: var(--primary);">❧</span>
-    <h2 style="margin-bottom: 1.5rem;">Acceso Administrativo</h2>
-    
-    <div class="field-group">
-      <input type="email" id="email" class="field-input" placeholder="Correo electrónico">
+<body class="login-body">
+  <div class="login-wrapper">
+    <div class="login-card">
+      <div class="login-header">
+        <span class="logo-icon">❧</span>
+        <h1>La Casa de las Flores</h1>
+        <p>Panel de Administración</p>
+      </div>
+      
+      <div class="field-group">
+        <label class="field-label" style="text-align: left;">Correo electrónico</label>
+        <input type="email" id="email" class="field-input" placeholder="admin@lacasadelasflores.com">
+      </div>
+      <div class="field-group">
+        <label class="field-label" style="text-align: left;">Contraseña</label>
+        <input type="password" id="password" class="field-input" placeholder="••••••••">
+      </div>
+      
+      <button type="button" class="btn-submit" onclick="window.login()">Iniciar Sesión</button>
+      <p id="error-msg" class="error-msg" style="display: none;"></p>
     </div>
-    <div class="field-group">
-      <input type="password" id="password" class="field-input" placeholder="Contraseña">
-    </div>
-    
-    <button class="btn-submit" onclick="login()">Ingresar</button>
-    <p id="error-msg" style="color: red; font-size: 0.8rem; margin-top: 1rem; display: none;"></p>
   </div>
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-app.js";
     import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-auth.js";
 
-    // Tu configuración de Firebase
     const firebaseConfig = {
       apiKey: "AIzaSyApqXnIJO8YxbZki879_WliO4w8IaPnccQ",
       authDomain: "la-casa-de-las-flores-6519b.firebaseapp.com",
@@ -48,23 +46,25 @@
       appId: "1:276633472408:web:c3c132939d238f9f282fed"
     };
 
-    // Inicializar Firebase
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
 
-    // Adjuntar la función a window para que funcione con el onclick del botón
     window.login = function() {
       const email = document.getElementById('email').value;
       const pass = document.getElementById('password').value;
       const errorMsg = document.getElementById('error-msg');
+      const btn = document.querySelector('.btn-submit');
 
+      btn.innerText = "Verificando...";
+      
       signInWithEmailAndPassword(auth, email, pass)
         .then((userCredential) => {
-          window.location.href = "index.html"; // Redirige al panel admin
+          window.location.href = "index.html";
         })
         .catch((error) => {
+          btn.innerText = "Iniciar Sesión";
           errorMsg.style.display = 'block';
-          errorMsg.innerText = "Credenciales incorrectas.";
+          errorMsg.innerText = "Credenciales incorrectas. Intenta de nuevo.";
         });
     }
   </script>
