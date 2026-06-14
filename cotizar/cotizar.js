@@ -113,8 +113,13 @@ window.generateInvoicePDF = async function() {
         }
     });
 
-    // 2. Pasar el diseño directamente como String (Texto). Ancho fijo de 800px.
-    const htmlContent = `
+    // 2. Crear un contenedor físico en el DOM, pero fuera de la vista (off-screen)
+    const tempContainer = document.createElement('div');
+    tempContainer.style.position = 'absolute';
+    tempContainer.style.left = '-9999px';
+    tempContainer.style.top = '0';
+    
+    tempContainer.innerHTML = `
         <div style="padding: 50px; font-family: 'Helvetica', sans-serif; color: #333; background: #fff; width: 800px; box-sizing: border-box;">
             <div style="display: flex; justify-content: space-between; border-bottom: 2px solid #f2e7e7; padding-bottom: 20px; margin-bottom: 30px;">
                 <div>
@@ -159,21 +164,26 @@ window.generateInvoicePDF = async function() {
         </div>
     `;
 
+    // 3. Añadir el contenedor temporal al HTML para que la librería pueda "leerlo"
+    document.body.appendChild(tempContainer);
+
     const opt = {
         margin:       0,
         filename:     `Cotizacion_${clientName.replace(/ /g, '_')}.pdf`,
         image:        { type: 'jpeg', quality: 0.98 },
-        html2canvas:  { scale: 2, useCORS: true }, // useCORS mejora la carga
+        html2canvas:  { scale: 2, useCORS: true },
         jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
     };
 
-    // 3. Procesar, descargar y restaurar el botón
+    // 4. Procesar, descargar, limpiar la pantalla y restaurar el botón
     try {
-        await html2pdf().set(opt).from(htmlContent).save();
+        await html2pdf().set(opt).from(tempContainer).save();
     } catch (error) {
         console.error("Error al generar PDF:", error);
         alert("Ocurrió un error al descargar. Intenta nuevamente.");
     } finally {
+        // MUY IMPORTANTE: Eliminar el elemento temporal para no dejar basura en la página
+        document.body.removeChild(tempContainer);
         btn.innerHTML = originalText;
         btn.disabled = false;
     }
