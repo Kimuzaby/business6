@@ -428,7 +428,7 @@ function buildAndDownloadPDF(clientName, date, event, validity, total, items) {
   doc.setFontSize(9);
   doc.setTextColor(153, 153, 153);
   doc.text("Gracias por permitirnos ser parte de tu historia.", pageWidth / 2, 266, { align: 'center' });
-  doc.text("@lacasadelasflores_sv | WhatsApp: +503 7048-3939 | Jorge Hernández", pageWidth / 2, 271, { align: 'center' });
+  doc.text("@lacasadelasflores_sv | WhatsApp: +503 7763-3421 | Jorge Hernández", pageWidth / 2, 271, { align: 'center' });
 
   doc.save(`Cotizacion_${clientName.replace(/\s+/g, '_')}.pdf`);
 }
