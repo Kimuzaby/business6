@@ -83,12 +83,13 @@ window.generateInvoicePDF = async function() {
     const validity = document.getElementById('client-validity').value;
     const total = window.calculateTotal();
 
-    // 1. Cambiar el estado del botón a "Descargando..."
+    // 1. Estado del botón
     const btn = document.querySelector('.btn-generate');
     const originalText = btn.innerHTML;
     btn.innerHTML = "Procesando PDF...";
     btn.disabled = true;
 
+    // 2. Recolectar filas
     let itemsHTML = '';
     const rows = document.querySelectorAll('.item-row');
     rows.forEach(row => {
@@ -113,15 +114,8 @@ window.generateInvoicePDF = async function() {
         }
     });
 
-    // 2. Crear el contenedor, pero usar OPACIDAD 0 para que no falle el renderizado
-    const tempContainer = document.createElement('div');
-    tempContainer.style.position = 'fixed';
-    tempContainer.style.top = '0';
-    tempContainer.style.left = '0';
-    tempContainer.style.zIndex = '-9999';
-    tempContainer.style.opacity = '0'; // Lo hace invisible, pero físicamente renderizable
-    
-    tempContainer.innerHTML = `
+    // 3. Crear el diseño en String (puros estilos en línea, sin oklch)
+    const pdfHTML = `
         <div style="padding: 50px; font-family: 'Helvetica', sans-serif; color: #333; background: #fff; width: 800px; box-sizing: border-box;">
             <div style="display: flex; justify-content: space-between; border-bottom: 2px solid #f2e7e7; padding-bottom: 20px; margin-bottom: 30px;">
                 <div>
@@ -166,30 +160,53 @@ window.generateInvoicePDF = async function() {
         </div>
     `;
 
-    document.body.appendChild(tempContainer);
+    // 4. CREAR LA "HABITACIÓN LIMPIA" (Iframe aislado)
+    const iframe = document.createElement('iframe');
+    iframe.style.position = 'fixed';
+    iframe.style.top = '-9999px'; // Fuera de la vista
+    iframe.style.width = '800px'; // Ancho perfecto para el PDF
+    iframe.style.height = '1200px';
+    iframe.style.border = 'none';
+    document.body.appendChild(iframe);
+
+    // Escribir el HTML dentro del iframe (¡Sin conectar tu style.css!)
+    const iframeDoc = iframe.contentWindow.document;
+    iframeDoc.open();
+    iframeDoc.write(`
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <meta charset="UTF-8">
+            <title>PDF</title>
+        </head>
+        <body style="margin: 0; padding: 0;">
+            ${pdfHTML}
+        </body>
+        </html>
+    `);
+    iframeDoc.close();
 
     const opt = {
         margin:       0,
         filename:     `Cotizacion_${clientName.replace(/ /g, '_')}.pdf`,
         image:        { type: 'jpeg', quality: 0.98 },
-        html2canvas:  { scale: 2, useCORS: true, windowWidth: 800 }, // windowWidth asegura estabilidad
+        html2canvas:  { scale: 2, useCORS: true },
         jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
     };
 
-    // 3. Procesar, descargar, limpiar la pantalla y restaurar el botón
+    // 5. Generar PDF, Limpiar y Restaurar
     try {
-        // Validar que la librería existe antes de ejecutar
-        if (typeof window.html2pdf === 'undefined') {
-            throw new Error("Librería html2pdf no detectada en el navegador.");
-        }
-        await window.html2pdf().set(opt).from(tempContainer).save();
+        // Pausa de 150ms para asegurar que el iframe pintó el HTML internamente
+        await new Promise(resolve => setTimeout(resolve, 150));
+        
+        // ¡Magia! Generamos el PDF desde el body del iframe aislado
+        await window.html2pdf().set(opt).from(iframeDoc.body).save();
     } catch (error) {
         console.error("Error al generar PDF:", error);
-        alert("Error al descargar: " + error.message); // Ahora te dirá EXACTAMENTE por qué falló
+        alert("Error al descargar: " + error.message);
     } finally {
-        if (document.body.contains(tempContainer)) {
-            document.body.removeChild(tempContainer);
-        }
+        // Destruir la evidencia (el iframe)
+        document.body.removeChild(iframe);
         btn.innerHTML = originalText;
         btn.disabled = false;
     }
