@@ -83,130 +83,135 @@ window.generateInvoicePDF = async function() {
     const validity = document.getElementById('client-validity').value;
     const total = window.calculateTotal();
 
-    // 1. Estado del botón
     const btn = document.querySelector('.btn-generate');
     const originalText = btn.innerHTML;
-    btn.innerHTML = "Procesando PDF...";
+    btn.innerHTML = "Generando PDF...";
     btn.disabled = true;
 
-    // 2. Recolectar filas
-    let itemsHTML = '';
-    const rows = document.querySelectorAll('.item-row');
-    rows.forEach(row => {
-        const name = row.querySelector('.item-name').value;
-        const desc = row.querySelector('.item-desc').value;
-        const qty = row.querySelector('.item-qty').value;
-        const price = parseFloat(row.querySelector('.item-price').value || 0).toFixed(2);
-        const subtotal = (qty * price).toFixed(2);
-
-        if (name) {
-            itemsHTML += `
-                <tr style="border-bottom: 1px solid #eee;">
-                    <td style="padding: 15px 0;">
-                        <strong style="color:#1a1a1a;">${name}</strong><br>
-                        <span style="font-size:11px; color:#666;">${desc}</span>
-                    </td>
-                    <td style="padding: 15px 0; text-align:center;">${qty}</td>
-                    <td style="padding: 15px 0; text-align:right;">$${price}</td>
-                    <td style="padding: 15px 0; text-align:right;"><strong>$${subtotal}</strong></td>
-                </tr>
-            `;
-        }
-    });
-
-    // 3. Crear el diseño en String (puros estilos en línea, sin oklch)
-    const pdfHTML = `
-        <div style="padding: 50px; font-family: 'Helvetica', sans-serif; color: #333; background: #fff; width: 800px; box-sizing: border-box;">
-            <div style="display: flex; justify-content: space-between; border-bottom: 2px solid #f2e7e7; padding-bottom: 20px; margin-bottom: 30px;">
-                <div>
-                    <h1 style="font-family: 'Georgia', serif; font-size: 26px; margin: 0; color: #1a1a1a;">La Casa de las Flores</h1>
-                    <p style="font-size: 11px; color: #8b5cf6; margin: 5px 0 0 0; text-transform: uppercase; letter-spacing: 1px;">Propuesta Floral & Cotización</p>
-                </div>
-                <div style="text-align: right; font-size: 12px; color: #666;">
-                    <p style="margin: 0;"><strong>Fecha:</strong> ${new Date().toLocaleDateString()}</p>
-                    <p style="margin: 5px 0 0 0;"><strong>Válido por:</strong> ${validity}</p>
-                </div>
-            </div>
-
-            <div style="background: #fdf6f6; border-radius: 8px; padding: 20px; margin-bottom: 30px;">
-                <p style="margin: 0; font-size: 14px;">Propuesta preparada para:</p>
-                <h2 style="font-family: 'Georgia', serif; font-style: italic; color: #1a1a1a; margin: 5px 0 10px 0;">${clientName}</h2>
-                <p style="margin: 0; font-size: 12px; color: #555;"><strong>Evento:</strong> ${event} | <strong>Fecha del evento:</strong> ${date || 'A confirmar'}</p>
-            </div>
-
-            <table style="width: 100%; border-collapse: collapse; font-size: 13px; margin-bottom: 30px;">
-                <thead>
-                    <tr style="border-bottom: 2px solid #eee; color: #888; text-transform: uppercase; font-size: 10px;">
-                        <th style="padding: 10px 0; text-align: left;">Descripción del Arreglo</th>
-                        <th style="padding: 10px 0; text-align: center;">Cant.</th>
-                        <th style="padding: 10px 0; text-align: right;">Precio Unit.</th>
-                        <th style="padding: 10px 0; text-align: right;">Subtotal</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    ${itemsHTML}
-                </tbody>
-            </table>
-
-            <div style="text-align: right; margin-bottom: 50px;">
-                <p style="font-size: 14px; color: #666; margin: 0;">Total Estimado</p>
-                <h2 style="font-family: 'Georgia', serif; font-size: 28px; color: #8b5cf6; margin: 5px 0 0 0;">$${total} USD</h2>
-            </div>
-
-            <div style="border-top: 1px solid #eee; padding-top: 20px; text-align: center; font-size: 11px; color: #aaa;">
-                <p style="margin: 0 0 5px 0;">Gracias por permitirnos ser parte de tu historia.</p>
-                <p style="margin: 0;">@lacasadelasflores_sv | WhatsApp: +503 7048-3939 | Jorge Hernández</p>
-            </div>
-        </div>
-    `;
-
-    // 4. CREAR LA "HABITACIÓN LIMPIA" (Iframe aislado)
-    const iframe = document.createElement('iframe');
-    iframe.style.position = 'fixed';
-    iframe.style.top = '-9999px'; // Fuera de la vista
-    iframe.style.width = '800px'; // Ancho perfecto para el PDF
-    iframe.style.height = '1200px';
-    iframe.style.border = 'none';
-    document.body.appendChild(iframe);
-
-    // Escribir el HTML dentro del iframe (¡Sin conectar tu style.css!)
-    const iframeDoc = iframe.contentWindow.document;
-    iframeDoc.open();
-    iframeDoc.write(`
-        <!DOCTYPE html>
-        <html>
-        <head>
-            <meta charset="UTF-8">
-            <title>PDF</title>
-        </head>
-        <body style="margin: 0; padding: 0;">
-            ${pdfHTML}
-        </body>
-        </html>
-    `);
-    iframeDoc.close();
-
-    const opt = {
-        margin:       0,
-        filename:     `Cotizacion_${clientName.replace(/ /g, '_')}.pdf`,
-        image:        { type: 'jpeg', quality: 0.98 },
-        html2canvas:  { scale: 2, useCORS: true },
-        jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
-    };
-
-    // 5. Generar PDF, Limpiar y Restaurar
     try {
-        // Pausa de 150ms para asegurar que el iframe pintó el HTML internamente
-        await new Promise(resolve => setTimeout(resolve, 150));
+        // Inicializar jsPDF nativo
+        const { jsPDF } = window.jspdf;
+        const doc = new jsPDF('p', 'mm', 'letter'); // Tamaño carta
+        const pageWidth = doc.internal.pageSize.getWidth();
+
+        // 1. Cabecera
+        doc.setFont("times", "bold");
+        doc.setFontSize(24);
+        doc.setTextColor(26, 26, 26);
+        doc.text("La Casa de las Flores", 20, 30);
+
+        doc.setFont("helvetica", "bold");
+        doc.setFontSize(9);
+        doc.setTextColor(139, 92, 246); // Color morado aesthetic (#8b5cf6)
+        doc.text("PROPUESTA EXCLUSIVA", 20, 36);
+
+        doc.setFont("helvetica", "normal");
+        doc.setFontSize(10);
+        doc.setTextColor(100, 100, 100);
+        doc.text(`Fecha: ${new Date().toLocaleDateString()}`, pageWidth - 20, 30, { align: 'right' });
+        doc.text(`Válido por: ${validity}`, pageWidth - 20, 36, { align: 'right' });
+
+        doc.setDrawColor(238, 238, 238);
+        doc.setLineWidth(0.5);
+        doc.line(20, 42, pageWidth - 20, 42);
+
+        // 2. Datos del cliente (Caja de fondo sutil)
+        doc.setFillColor(253, 246, 246);
+        doc.roundedRect(20, 50, pageWidth - 40, 30, 3, 3, 'F');
+
+        doc.setFont("helvetica", "normal");
+        doc.setFontSize(10);
+        doc.setTextColor(85, 85, 85);
+        doc.text("Propuesta preparada para:", 25, 60);
+
+        doc.setFont("times", "italic");
+        doc.setFontSize(18);
+        doc.setTextColor(26, 26, 26);
+        doc.text(clientName, 25, 68);
+
+        doc.setFont("helvetica", "normal");
+        doc.setFontSize(10);
+        doc.setTextColor(85, 85, 85);
+        doc.text(`Evento: ${event}   |   Fecha: ${date || 'A confirmar'}`, 25, 75);
+
+        // 3. Preparar datos para la tabla dinámica
+        const tableData = [];
+        const rows = document.querySelectorAll('.item-row');
+        rows.forEach(row => {
+            const name = row.querySelector('.item-name').value;
+            const desc = row.querySelector('.item-desc').value;
+            const qty = row.querySelector('.item-qty').value;
+            const price = parseFloat(row.querySelector('.item-price').value || 0).toFixed(2);
+            const subtotal = (qty * price).toFixed(2);
+
+            if (name) {
+                tableData.push([
+                    `${name}\n${desc}`,
+                    qty,
+                    `$${price}`,
+                    `$${subtotal}`
+                ]);
+            }
+        });
+
+        // 4. Dibujar tabla (Nativa y sin conflictos)
+        doc.autoTable({
+            startY: 90,
+            head: [['Descripción del Arreglo', 'Cant.', 'Precio Unit.', 'Subtotal']],
+            body: tableData,
+            theme: 'plain',
+            headStyles: {
+                textColor: [136, 136, 136],
+                fontSize: 9,
+                fontStyle: 'bold',
+                halign: 'left'
+            },
+            bodyStyles: {
+                fontSize: 10,
+                textColor: [51, 51, 51],
+            },
+            columnStyles: {
+                0: { cellWidth: 90 },
+                1: { halign: 'center' },
+                2: { halign: 'right' },
+                3: { halign: 'right', fontStyle: 'bold' }
+            },
+            alternateRowStyles: {
+                fillColor: [250, 250, 250]
+            },
+            margin: { left: 20, right: 20 }
+        });
+
+        // 5. Total Estimado
+        const finalY = doc.lastAutoTable.finalY + 15;
         
-        // ¡Magia! Generamos el PDF desde el body del iframe aislado
-        await window.html2pdf().set(opt).from(iframeDoc.body).save();
+        doc.setFont("helvetica", "normal");
+        doc.setFontSize(11);
+        doc.setTextColor(100, 100, 100);
+        doc.text("Total Estimado", pageWidth - 20, finalY, { align: 'right' });
+
+        doc.setFont("times", "bold");
+        doc.setFontSize(22);
+        doc.setTextColor(139, 92, 246);
+        doc.text(`$${total} USD`, pageWidth - 20, finalY + 8, { align: 'right' });
+
+        // 6. Footer
+        doc.setDrawColor(238, 238, 238);
+        doc.line(20, 260, pageWidth - 20, 260);
+
+        doc.setFont("helvetica", "normal");
+        doc.setFontSize(9);
+        doc.setTextColor(153, 153, 153);
+        doc.text("Gracias por permitirnos ser parte de tu historia.", pageWidth / 2, 266, { align: 'center' });
+        doc.text("@lacasadelasflores_sv | WhatsApp: +503 7048-3939 | Jorge Hernández", pageWidth / 2, 271, { align: 'center' });
+
+        // 7. Descargar
+        doc.save(`Cotizacion_${clientName.replace(/ /g, '_')}.pdf`);
+        
     } catch (error) {
-        console.error("Error al generar PDF:", error);
-        alert("Error al descargar: " + error.message);
+        console.error("Error nativo PDF:", error);
+        alert("Ocurrió un error al generar el documento.");
     } finally {
-        // Destruir la evidencia (el iframe)
-        document.body.removeChild(iframe);
         btn.innerHTML = originalText;
         btn.disabled = false;
     }
