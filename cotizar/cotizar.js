@@ -113,11 +113,13 @@ window.generateInvoicePDF = async function() {
         }
     });
 
-    // 2. Crear un contenedor físico en el DOM, pero fuera de la vista (off-screen)
+    // 2. Crear el contenedor, pero usar OPACIDAD 0 para que no falle el renderizado
     const tempContainer = document.createElement('div');
-    tempContainer.style.position = 'absolute';
-    tempContainer.style.left = '-9999px';
+    tempContainer.style.position = 'fixed';
     tempContainer.style.top = '0';
+    tempContainer.style.left = '0';
+    tempContainer.style.zIndex = '-9999';
+    tempContainer.style.opacity = '0'; // Lo hace invisible, pero físicamente renderizable
     
     tempContainer.innerHTML = `
         <div style="padding: 50px; font-family: 'Helvetica', sans-serif; color: #333; background: #fff; width: 800px; box-sizing: border-box;">
@@ -164,26 +166,30 @@ window.generateInvoicePDF = async function() {
         </div>
     `;
 
-    // 3. Añadir el contenedor temporal al HTML para que la librería pueda "leerlo"
     document.body.appendChild(tempContainer);
 
     const opt = {
         margin:       0,
         filename:     `Cotizacion_${clientName.replace(/ /g, '_')}.pdf`,
         image:        { type: 'jpeg', quality: 0.98 },
-        html2canvas:  { scale: 2, useCORS: true },
+        html2canvas:  { scale: 2, useCORS: true, windowWidth: 800 }, // windowWidth asegura estabilidad
         jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
     };
 
-    // 4. Procesar, descargar, limpiar la pantalla y restaurar el botón
+    // 3. Procesar, descargar, limpiar la pantalla y restaurar el botón
     try {
-        await html2pdf().set(opt).from(tempContainer).save();
+        // Validar que la librería existe antes de ejecutar
+        if (typeof window.html2pdf === 'undefined') {
+            throw new Error("Librería html2pdf no detectada en el navegador.");
+        }
+        await window.html2pdf().set(opt).from(tempContainer).save();
     } catch (error) {
         console.error("Error al generar PDF:", error);
-        alert("Ocurrió un error al descargar. Intenta nuevamente.");
+        alert("Error al descargar: " + error.message); // Ahora te dirá EXACTAMENTE por qué falló
     } finally {
-        // MUY IMPORTANTE: Eliminar el elemento temporal para no dejar basura en la página
-        document.body.removeChild(tempContainer);
+        if (document.body.contains(tempContainer)) {
+            document.body.removeChild(tempContainer);
+        }
         btn.innerHTML = originalText;
         btn.disabled = false;
     }
